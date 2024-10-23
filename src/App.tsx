@@ -1,5 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
 
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+
 import Home from '@/pages/Home';
 import Month from '@/pages/Month';
 import MonthCustom from '@/pages/MonthCustom';
@@ -7,13 +10,13 @@ import MonthCustom from '@/pages/MonthCustom';
 function App() {
   return (
     <div>
-      {/* <Header /> */}
+      <Header />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/month/' element={<Month />} />
         <Route path='/month-custom/' element={<MonthCustom />} />
       </Routes>
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 }
