@@ -2,14 +2,21 @@ import { NavLink } from 'react-router-dom';
 import { SquareArrowOutUpRight } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 const Header = () => {
+  const { toast } = useToast();
+
   const copyUrl = () => {
     const homeUrl = `${window.location.origin}`;
     navigator.clipboard
       .writeText(homeUrl)
       .then(() => {
-        console.log('Copied');
+        toast({
+          title: '링크가 복사되었습니다',
+          description: '친구들에게 Of this를 공유해보세요 :)',
+          duration: 2000,
+        });
       })
       .catch((err) => {
         console.log('Failed to copy', err);

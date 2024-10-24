@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { Toaster } from '@/components/ui/toaster';
 
 import Home from '@/pages/Home';
 import Month from '@/pages/Month';
@@ -17,6 +18,7 @@ function App() {
         <Route path='/month-custom/' element={<MonthCustom />} />
       </Routes>
       <Footer />
+      <Toaster />
     </div>
   );
 }
