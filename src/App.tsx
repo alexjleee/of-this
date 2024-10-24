@@ -8,6 +8,7 @@ import { Toaster } from '@/components/ui/toaster';
 import Home from '@/pages/Home';
 import Month from '@/pages/Month';
 import MonthCustom from '@/pages/MonthCustom';
+import MonthSummary from '@/pages/MonthSummary';
 
 const AppLayout: FC<PropsWithChildren> = ({ children }) => (
   <>
@@ -27,6 +28,7 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/month/' element={<Month />} />
         <Route path='/month-custom/' element={<MonthCustom />} />
+        <Route path='/month-summary/' element={<MonthSummary />} />
       </Routes>
     </AppLayout>
   );
