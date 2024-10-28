@@ -1,16 +1,30 @@
 import { FC, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 // Questionnaire - Intro ----------
 interface IntroProps {
+  title: string;
+  description: string;
+  coverImgSrc: string;
   start: () => void;
 }
-const Intro: FC<IntroProps> = ({ start }) => {
+const Intro: FC<IntroProps> = ({ title, description, coverImgSrc, start }) => {
   return (
-    <div>
-      <h2>Intro</h2>
-      <Button onClick={start}>시작하기</Button>
+    <div className='flex flex-col gap-4 justify-between h-full '>
+      <div className='flex flex-col gap-4 justify-center items-center h-full text-center'>
+        <h2 className='text-xl font-semibold'>{title}</h2>
+        <AspectRatio ratio={3 / 2} className='rounded-lg overflow-hidden'>
+          <img className='w-full h-full object-cover' src={coverImgSrc} />
+        </AspectRatio>
+        <p>{description}</p>
+      </div>
+      <div>
+        <Button onClick={start} className='w-full'>
+          시작하기
+        </Button>
+      </div>
     </div>
   );
 };
@@ -46,7 +60,17 @@ const Result: FC<ResultProps> = ({ redo, edit }) => {
 // Questionnaire ----------
 type Step = 'intro' | 'in-progress' | 'result';
 
-const Questionnaire = () => {
+interface QuestionnaireProps {
+  title: string;
+  description: string;
+  coverImgSrc: string;
+}
+
+const Questionnaire: FC<QuestionnaireProps> = ({
+  title,
+  description,
+  coverImgSrc,
+}) => {
   const [step, setStep] = useState<Step>('intro');
 
   const goToIntro = () => setStep('intro');
@@ -54,11 +78,18 @@ const Questionnaire = () => {
   const goToResult = () => setStep('result');
 
   return (
-    <div>
-      {step === 'intro' && <Intro start={goToInProgress} />}
+    <>
+      {step === 'intro' && (
+        <Intro
+          title={title}
+          description={description}
+          coverImgSrc={coverImgSrc}
+          start={goToInProgress}
+        />
+      )}
       {step === 'in-progress' && <InProgress finish={goToResult} />}
       {step === 'result' && <Result redo={goToIntro} edit={goToInProgress} />}
-    </div>
+    </>
   );
 };
 
