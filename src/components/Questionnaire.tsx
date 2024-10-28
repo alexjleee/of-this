@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Progress } from '@/components/ui/progress';
 
 // Questionnaire - Intro ----------
 interface IntroProps {
@@ -145,11 +146,11 @@ const InProgress: FC<InProgressProps> = ({
   return (
     <div className='flex flex-col gap-4 justify-between h-full'>
       <div>
-        <h2 className='text-sm font-semibold'>
+        <h2 className='mb-2 text-sm font-semibold'>
           {title}
           <span>{` (${currentIndex + 1}/${questions.length})`}</span>
         </h2>
-        {/* TODO: Progress Bar */}
+        <Progress value={((currentIndex + 1) / questions.length) * 100} />
       </div>
       <ResponseField
         question={currentQuestion}
