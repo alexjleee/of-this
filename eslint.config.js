@@ -34,6 +34,7 @@ export default tseslint.config(
       ],
       ...react.configs.recommended.rules,
       ...react.configs['jsx-runtime'].rules,
+      'react/prop-types': 0, // TS is already validating prop types
     },
   },
 );

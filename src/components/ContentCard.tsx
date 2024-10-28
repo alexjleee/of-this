@@ -56,12 +56,12 @@ const ContentCard: FC<Props> = ({ to, ...rest }) => {
       </Clickable>
     );
   } else {
+    return (
+      <Unclickable>
+        <Content {...rest} />
+      </Unclickable>
+    );
   }
-  return (
-    <Unclickable>
-      <Content {...rest} />
-    </Unclickable>
-  );
 };
 
 export default ContentCard;
