@@ -1,4 +1,4 @@
-import { FC, useId, useState } from 'react';
+import { FC, Fragment, useId, useState } from 'react';
 import { Proportions } from 'lucide-react';
 
 import { Question } from '@/types/question.types';
@@ -185,13 +185,13 @@ interface DisplayProps {
   questions: Question[];
 }
 
-const ratios = [9 / 16, 4 / 5, 1 / 1];
+const RATIOS = [9 / 16, 4 / 5, 1 / 1];
 
-const Display: FC<DisplayProps> = () => {
+const Display: FC<DisplayProps> = ({ questions }) => {
   const [ratioIndex, setRatioIndex] = useState(0);
 
   const handleRatio = () => {
-    setRatioIndex((prev) => (prev + 1) % ratios.length);
+    setRatioIndex((prev) => (prev + 1) % RATIOS.length);
   };
 
   return (
@@ -205,8 +205,18 @@ const Display: FC<DisplayProps> = () => {
       </div>
       {/* Display */}
       <div className='w-full h-full bg-white'>
-        <AspectRatio ratio={ratios[ratioIndex]}>
-          {/* TODO: Display the result in an image */}
+        <AspectRatio ratio={RATIOS[ratioIndex]}>
+          <div>
+            {questions.map((q) => {
+              if (!q.answer) return null;
+              return (
+                <Fragment key={q.id}>
+                  <div>{q.keyword}</div>
+                  <div>{q.answer}</div>
+                </Fragment>
+              );
+            })}
+          </div>
         </AspectRatio>
       </div>
     </div>
