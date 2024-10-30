@@ -1,7 +1,8 @@
-import { FC, Fragment, useId, useState } from 'react';
+import { FC, Fragment, useEffect, useId, useState } from 'react';
 import { Proportions } from 'lucide-react';
 
 import { Question } from '@/types/question.types';
+import useMeasure from '@/hooks/useMeasure';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -186,6 +187,8 @@ interface DisplayProps {
 }
 
 const RATIOS = [9 / 16, 4 / 5, 1 / 1];
+const DEFAULT_FONT_SIZE = 1.25; // 1.25rem = 20px
+const FONT_SIZE_STEP = 0.0625; // 0.0625rem = 1px
 
 const Display: FC<DisplayProps> = ({ questions }) => {
   const [ratioIndex, setRatioIndex] = useState(0);
@@ -193,6 +196,27 @@ const Display: FC<DisplayProps> = ({ questions }) => {
   const handleRatio = () => {
     setRatioIndex((prev) => (prev + 1) % RATIOS.length);
   };
+
+  const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
+  const [containerRef, containerRect] = useMeasure();
+  const [contentRef, contentRect] = useMeasure();
+  const [hidden, setHidden] = useState(false);
+
+  useEffect(() => {
+    // When container height changes, reset font size to default
+    setFontSize(DEFAULT_FONT_SIZE);
+  }, [containerRect.height]);
+
+  useEffect(() => {
+    // When content height changes, decrease font size if content overflows container
+    if (contentRect.height > containerRect.height) {
+      setHidden(true); // Hide content while font size is adjusting
+      setFontSize((size) => size - FONT_SIZE_STEP);
+    } else {
+      setHidden(false); // Reveal content when font size is optimized
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contentRect.height]);
 
   return (
     <div className='flex flex-col items-center gap-4 w-full max-w-96 h-full'>
@@ -204,9 +228,15 @@ const Display: FC<DisplayProps> = ({ questions }) => {
         {/* TODO: Add theme buttons */}
       </div>
       {/* Display */}
-      <div className='w-full h-full bg-white'>
+      <div ref={containerRef} className='w-full h-full bg-white'>
         <AspectRatio ratio={RATIOS[ratioIndex]}>
-          <div>
+          <div
+            ref={contentRef}
+            style={{
+              fontSize: `${fontSize}rem`,
+              opacity: `${hidden ? 0 : 1}`,
+            }}
+          >
             {questions.map((q) => {
               if (!q.answer) return null;
               return (
