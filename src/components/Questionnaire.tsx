@@ -229,6 +229,10 @@ const Questionnaire: FC<QuestionnaireProps> = ({
     setQuestions(newQuestions);
   };
 
+  const resetAnswers = () => {
+    setQuestions(_questions);
+  };
+
   return (
     <>
       {step === 'intro' && (
@@ -247,7 +251,15 @@ const Questionnaire: FC<QuestionnaireProps> = ({
           finish={goToResult}
         />
       )}
-      {step === 'result' && <Result redo={goToIntro} edit={goToInProgress} />}
+      {step === 'result' && (
+        <Result
+          redo={() => {
+            resetAnswers();
+            goToIntro();
+          }}
+          edit={goToInProgress}
+        />
+      )}
     </>
   );
 };
