@@ -1,4 +1,5 @@
 import { FC, useId, useState } from 'react';
+import { Proportions } from 'lucide-react';
 
 import { Question } from '@/types/question.types';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
@@ -180,16 +181,71 @@ const InProgress: FC<InProgressProps> = ({
 };
 
 // Questionnaire - Result ----------
+interface DisplayProps {
+  questions: Question[];
+}
+
+const ratios = [9 / 16, 4 / 5, 1 / 1];
+
+const Display: FC<DisplayProps> = () => {
+  const [ratioIndex, setRatioIndex] = useState(0);
+
+  const handleRatio = () => {
+    setRatioIndex((prev) => (prev + 1) % ratios.length);
+  };
+
+  return (
+    <div className='flex flex-col items-center gap-4 w-full max-w-96 h-full'>
+      {/* Change Ratio & Theme Buttons */}
+      <div>
+        <Button variant='outline' size='icon' onClick={handleRatio}>
+          <Proportions />
+        </Button>
+        {/* TODO: Add theme buttons */}
+      </div>
+      {/* Display */}
+      <div className='w-full h-full bg-white'>
+        <AspectRatio ratio={ratios[ratioIndex]}>
+          {/* TODO: Display the result in an image */}
+        </AspectRatio>
+      </div>
+    </div>
+  );
+};
+
 interface ResultProps {
+  title: string;
+  questions: Question[];
   redo: () => void;
   edit: () => void;
 }
-const Result: FC<ResultProps> = ({ redo, edit }) => {
+const Result: FC<ResultProps> = ({ title, questions, redo, edit }) => {
+  const handleSaveImage = () => {
+    // TODO: save the result as a image
+  };
+
+  const handleShare = () => {
+    // TODO: share
+  };
+
   return (
-    <div>
-      <h2>Result</h2>
-      <Button onClick={edit}>수정하기</Button>
-      <Button onClick={redo}>다시하기</Button>
+    <div className='flex flex-col justify-between items-center gap-8 w-full h-full'>
+      <h2 className='text-sm font-semibold'>{title}</h2>
+      <Display questions={questions} />
+      <div className='flex flex-col gap-4 w-full max-w-96'>
+        <Button onClick={handleSaveImage} className='w-full'>
+          이미지 저장하기
+        </Button>
+        <Button onClick={handleShare} variant='outline' className='w-full'>
+          공유하기
+        </Button>
+        <Button onClick={edit} variant='outline' className='w-full'>
+          수정하기
+        </Button>
+        <Button onClick={redo} variant='outline' className='w-full'>
+          다시하기
+        </Button>
+      </div>
     </div>
   );
 };
@@ -253,6 +309,8 @@ const Questionnaire: FC<QuestionnaireProps> = ({
       )}
       {step === 'result' && (
         <Result
+          title={title}
+          questions={questions}
           redo={() => {
             resetAnswers();
             goToIntro();
