@@ -189,6 +189,7 @@ interface DisplayProps {
 const RATIOS = [9 / 16, 4 / 5, 1 / 1];
 const DEFAULT_FONT_SIZE = 1.25; // 1.25rem = 20px
 const FONT_SIZE_STEP = 0.0625; // 0.0625rem = 1px
+const PADDING = 20;
 
 const Display: FC<DisplayProps> = ({ questions }) => {
   const [ratioIndex, setRatioIndex] = useState(0);
@@ -209,7 +210,7 @@ const Display: FC<DisplayProps> = ({ questions }) => {
 
   useEffect(() => {
     // When content height changes, decrease font size if content overflows container
-    if (contentRect.height > containerRect.height) {
+    if (contentRect.height > containerRect.height - PADDING * 2) {
       setHidden(true); // Hide content while font size is adjusting
       setFontSize((size) => size - FONT_SIZE_STEP);
     } else {
@@ -230,22 +231,37 @@ const Display: FC<DisplayProps> = ({ questions }) => {
       {/* Display */}
       <div ref={containerRef} className='w-full h-full bg-white'>
         <AspectRatio ratio={RATIOS[ratioIndex]}>
-          <div
-            ref={contentRef}
-            style={{
-              fontSize: `${fontSize}rem`,
-              opacity: `${hidden ? 0 : 1}`,
-            }}
-          >
-            {questions.map((q) => {
-              if (!q.answer) return null;
-              return (
-                <Fragment key={q.id}>
-                  <div>{q.keyword}</div>
-                  <div>{q.answer}</div>
-                </Fragment>
-              );
-            })}
+          <div className='flex justify-center items-center w-full h-full'>
+            <div
+              ref={contentRef}
+              style={{
+                fontSize: `${fontSize}rem`,
+                opacity: `${hidden ? 0 : 1}`,
+                padding: PADDING,
+              }}
+              className='grid grid-cols-[fit-content(33.3%)_auto]'
+            >
+              {questions.map((q) => {
+                if (!q.answer) return null;
+                if (q.id === 'title')
+                  return (
+                    <div
+                      key={q.id}
+                      className='col-span-2 py-[0.5em] font-semibold text-[1.5em] text-center'
+                    >
+                      {q.answer}
+                    </div>
+                  );
+                return (
+                  <Fragment key={q.id}>
+                    <div className='p-[0.5em] pr-[0.8em]'>{q.keyword}</div>
+                    <div className='p-[0.5em] pl-[0.8em] whitespace-break-spaces'>
+                      {q.answer}
+                    </div>
+                  </Fragment>
+                );
+              })}
+            </div>
           </div>
         </AspectRatio>
       </div>
