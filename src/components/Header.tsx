@@ -20,6 +20,12 @@ const Header = () => {
       })
       .catch((err) => {
         console.log('Failed to copy', err);
+        toast({
+          title: '링크를 복사할 수 없습니다',
+          description: '죄송합니다. 잠시 후 다시 시도해주세요.',
+          duration: 2000,
+          variant: 'destructive',
+        });
       });
   };
 
