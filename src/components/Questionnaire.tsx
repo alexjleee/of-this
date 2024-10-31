@@ -12,6 +12,7 @@ import { toPng } from 'html-to-image';
 
 import { Question } from '@/types/question.types';
 import useMeasure from '@/hooks/useMeasure';
+import { useToast } from '@/hooks/use-toast';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -362,6 +363,8 @@ interface ResultProps {
   edit: () => void;
 }
 const Result: FC<ResultProps> = ({ title, questions, redo, edit }) => {
+  const { toast } = useToast();
+
   const imageContainerRef = useRef(null);
 
   const handleSaveImage = () => {
@@ -374,13 +377,37 @@ const Result: FC<ResultProps> = ({ title, questions, redo, edit }) => {
           link.click();
         })
         .catch((err) => {
-          console.log(err);
+          console.log('Failed to save image', err);
+          toast({
+            title: '이미지를 다운로드 할 수 없습니다.',
+            description: '죄송합니다. 잠시 후 다시 시도해주세요.',
+            duration: 2000,
+            variant: 'destructive',
+          });
         });
     }
   };
 
   const handleShare = () => {
-    // TODO: share
+    const currentUrl = `${window.location}`;
+    navigator.clipboard
+      .writeText(currentUrl)
+      .then(() => {
+        toast({
+          title: '링크가 복사되었습니다',
+          description: `친구들에게 ${title}의 링크를 공유해보세요 :)`,
+          duration: 2000,
+        });
+      })
+      .catch((err) => {
+        console.log('Failed to copy', err);
+        toast({
+          title: '링크를 복사할 수 없습니다',
+          description: '죄송합니다. 잠시 후 다시 시도해주세요.',
+          duration: 2000,
+          variant: 'destructive',
+        });
+      });
   };
 
   return (
