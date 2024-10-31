@@ -1,3 +1,5 @@
+import monthSummaryCover from '@/assets/month-summary-cover.png';
+
 import { Separator } from '@/components/ui/separator';
 import ContentCard from '@/components/ContentCard';
 
@@ -11,7 +13,7 @@ const Home = () => {
           <ContentCard
             title='키워드로 돌아보는 한달'
             description='10가지 키워드로 여러분의 지난 한달을 돌아보세요.'
-            imgSrc='https://picsum.photos/800/1600'
+            imgSrc={monthSummaryCover}
             to='/month-summary'
           />
           <ContentCard

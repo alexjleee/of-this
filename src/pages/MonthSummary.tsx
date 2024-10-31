@@ -1,3 +1,5 @@
+import monthSummaryCover from '@/assets/month-summary-cover.png';
+
 import { Question } from '@/types/question.types';
 import Questionnaire from '@/components/Questionnaire';
 
@@ -121,7 +123,7 @@ const MonthSummary = () => {
     <Questionnaire
       title='키워드로 돌아보는 한달'
       description='10가지 키워드로 여러분의 지난 한달을 요약해보세요.'
-      coverImgSrc='https://picsum.photos/800/1600'
+      coverImgSrc={monthSummaryCover}
       questions={defaultQuestions}
     />
   );
