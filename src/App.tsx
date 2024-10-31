@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -28,11 +28,12 @@ function App() {
         {/* TODO:  */}
         {/* <Route path='/month/' element={<Month />} /> */}
         {/* <Route path='/month-custom/' element={<MonthCustom />} /> */}
-        <Route path='/month-summary/' element={<MonthSummary />} />
+        <Route path='/month-summary' element={<MonthSummary />} />
         {/* TODO:  */}
         {/* <Route path='/year/' element={<Month />} /> */}
         {/* <Route path='/year-custom/' element={<MonthCustom />} /> */}
-        <Route path='/year-summary/' element={<YearSummary />} />
+        <Route path='/year-summary' element={<YearSummary />} />
+        <Route path='*' element={<Navigate to='/' replace />} />
       </Routes>
     </AppLayout>
   );
