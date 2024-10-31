@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Proportions } from 'lucide-react';
+import { Proportions, Type } from 'lucide-react';
 import { toPng } from 'html-to-image';
 
 import { Question } from '@/types/question.types';
@@ -196,6 +196,7 @@ interface DisplayProps {
 }
 
 const RATIOS = [9 / 16, 4 / 5, 1 / 1];
+const FONTS = ['font-gothic', 'font-myungjo', 'font-cute'];
 const DEFAULT_FONT_SIZE = 1.25; // 1.25rem = 20px
 const FONT_SIZE_STEP = 0.0625; // 0.0625rem = 1px
 const PADDING = 20;
@@ -208,6 +209,12 @@ const Display = forwardRef<HTMLImageElement, DisplayProps>(function MyInput(
 
   const handleRatio = () => {
     setRatioIndex((prev) => (prev + 1) % RATIOS.length);
+  };
+
+  const [fontIndex, setFontIndex] = useState(0);
+
+  const handleFontFamily = () => {
+    setFontIndex((prev) => (prev + 1) % FONTS.length);
   };
 
   const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
@@ -237,9 +244,12 @@ const Display = forwardRef<HTMLImageElement, DisplayProps>(function MyInput(
   return (
     <div className='flex flex-col items-center gap-4 w-full max-w-96 h-full'>
       {/* Change Ratio & Theme Buttons */}
-      <div>
+      <div className='flex justify-center gap-4'>
         <Button variant='outline' size='icon' onClick={handleRatio}>
           <Proportions />
+        </Button>
+        <Button variant='outline' size='icon' onClick={handleFontFamily}>
+          <Type />
         </Button>
         {/* TODO: Add theme buttons */}
       </div>
@@ -248,7 +258,7 @@ const Display = forwardRef<HTMLImageElement, DisplayProps>(function MyInput(
         <AspectRatio ratio={RATIOS[ratioIndex]}>
           <div
             ref={imageContainerRef}
-            className='flex justify-center items-center w-full h-full bg-white'
+            className={`flex justify-center items-center w-full h-full bg-white ${FONTS[fontIndex]}`}
           >
             <div
               ref={contentRef}
