@@ -1,9 +1,12 @@
+type Display = 'title' | 'sub-title' | 'body';
+
 type ShortQuestion = {
   type: 'short';
   id: string;
   keyword: string;
   description: string;
   answer: string;
+  displayAs: Display;
 };
 
 type LongQuestion = {
@@ -12,6 +15,7 @@ type LongQuestion = {
   keyword: string;
   description: string;
   answer: string;
+  displayAs: Display;
 };
 
 type SelectOption = {
@@ -26,6 +30,7 @@ type SelectQuestion = {
   description: string;
   answer: string;
   options: SelectOption[];
+  displayAs: Display;
 };
 
 export type Question = ShortQuestion | LongQuestion | SelectQuestion;

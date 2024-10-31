@@ -324,7 +324,7 @@ const Display = forwardRef<HTMLImageElement, DisplayProps>(function MyInput(
             >
               {questions.map((q) => {
                 if (!q.answer) return null;
-                if (q.id === 'title')
+                if (q.displayAs === 'title')
                   return (
                     <div
                       key={q.id}
@@ -333,6 +333,16 @@ const Display = forwardRef<HTMLImageElement, DisplayProps>(function MyInput(
                       {q.answer}
                     </div>
                   );
+                if (q.displayAs === 'sub-title')
+                  return (
+                    <div
+                      key={q.id}
+                      className={`col-span-2 py-[0.5em] font-semibold text-center border-b ${colorVariants[color].text}`}
+                    >
+                      {q.answer}
+                    </div>
+                  );
+
                 return (
                   <Fragment key={q.id}>
                     <div
