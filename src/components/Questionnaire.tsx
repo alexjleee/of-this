@@ -179,7 +179,7 @@ const InProgress: FC<InProgressProps> = ({
         </Button>
         {currentIndex !== questions.length - 1 ? (
           <Button onClick={handleNext} className='w-full'>
-            디음
+            다음
           </Button>
         ) : (
           <Button onClick={handleFinish} className='w-full'>
