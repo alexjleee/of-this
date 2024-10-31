@@ -197,6 +197,49 @@ interface DisplayProps {
 
 const RATIOS = [9 / 16, 4 / 5, 1 / 1];
 const FONTS = ['font-gothic', 'font-myungjo', 'font-cute'];
+const COLORS = ['white', 'black', 'red', 'yellow', 'blue', 'grey'] as const;
+type Color = (typeof COLORS)[number];
+const colorVariants: Record<
+  Color,
+  { icon: string; container: string; text: string; title: string }
+> = {
+  white: {
+    icon: 'bg-zinc-100',
+    container: 'bg-white',
+    text: 'text-zinc-950 border-b-zinc-100 border-l-zinc-100',
+    title: 'text-zinc-950 border-zinc-100',
+  },
+  black: {
+    icon: 'bg-zinc-950',
+    container: 'bg-zinc-950',
+    text: 'text-white border-b-zinc-800 border-l-zinc-800',
+    title: 'text-white border-zinc-800',
+  },
+  red: {
+    icon: 'bg-red-500',
+    container: 'bg-red-100',
+    text: 'text-zinc-950 border-b-red-300 border-l-blue-300',
+    title: 'text-blue-800 border-red-300',
+  },
+  yellow: {
+    icon: 'bg-yellow-500',
+    container: 'bg-yellow-100',
+    text: 'text-stone-800 border-b-yellow-300 border-l-green-300',
+    title: 'text-green-800 border-yellow-300',
+  },
+  blue: {
+    icon: 'bg-blue-500',
+    container: 'bg-blue-100',
+    text: 'text-zinc-950 border-b-blue-300 border-l-red-300',
+    title: 'text-red-800 border-blue-300',
+  },
+  grey: {
+    icon: 'bg-stone-500',
+    container: 'bg-stone-200',
+    text: 'text-stone-800 border-b-stone-400 border-l-orange-300',
+    title: 'text-orange-800 border-stone-400',
+  },
+};
 const DEFAULT_FONT_SIZE = 1.25; // 1.25rem = 20px
 const FONT_SIZE_STEP = 0.0625; // 0.0625rem = 1px
 const PADDING = 20;
@@ -215,6 +258,13 @@ const Display = forwardRef<HTMLImageElement, DisplayProps>(function MyInput(
 
   const handleFontFamily = () => {
     setFontIndex((prev) => (prev + 1) % FONTS.length);
+  };
+
+  const [color, setColor] = useState<Color>(COLORS[0]);
+
+  const handleColors = () => {
+    const nextColor = COLORS[(COLORS.indexOf(color) + 1) % COLORS.length];
+    setColor(nextColor);
   };
 
   const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
@@ -251,14 +301,16 @@ const Display = forwardRef<HTMLImageElement, DisplayProps>(function MyInput(
         <Button variant='outline' size='icon' onClick={handleFontFamily}>
           <Type />
         </Button>
-        {/* TODO: Add theme buttons */}
+        <Button variant='outline' size='icon' onClick={handleColors}>
+          <div className={`w-4 h-4 ${colorVariants[color].icon}`}></div>
+        </Button>
       </div>
       {/* Display */}
       <div ref={containerRef} className='w-full h-full overflow-hidden'>
         <AspectRatio ratio={RATIOS[ratioIndex]}>
           <div
             ref={imageContainerRef}
-            className={`flex justify-center items-center w-full h-full bg-white ${FONTS[fontIndex]}`}
+            className={`flex justify-center items-center w-full h-full ${colorVariants[color].container} ${FONTS[fontIndex]}`}
           >
             <div
               ref={contentRef}
@@ -275,15 +327,21 @@ const Display = forwardRef<HTMLImageElement, DisplayProps>(function MyInput(
                   return (
                     <div
                       key={q.id}
-                      className='col-span-2 py-[0.5em] font-semibold text-[1.5em] text-center'
+                      className={`col-span-2 py-[0.5em] font-semibold text-[1.5em] text-center border-b ${colorVariants[color].title}`}
                     >
                       {q.answer}
                     </div>
                   );
                 return (
                   <Fragment key={q.id}>
-                    <div className='p-[0.5em] pr-[0.8em]'>{q.keyword}</div>
-                    <div className='p-[0.5em] pl-[0.8em] whitespace-break-spaces'>
+                    <div
+                      className={`p-[0.5em] pr-[0.8em] border-b ${colorVariants[color].title}`}
+                    >
+                      {q.keyword}
+                    </div>
+                    <div
+                      className={`p-[0.5em] pl-[0.8em] border-b border-l ${colorVariants[color].text} whitespace-break-spaces`}
+                    >
                       {q.answer}
                     </div>
                   </Fragment>
