@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react';
 import { Proportions, Type } from 'lucide-react';
-import { toPng } from 'html-to-image';
+import html2canvas from 'html2canvas';
 
 import { Question } from '@/types/question.types';
 import useMeasure from '@/hooks/useMeasure';
@@ -379,14 +379,14 @@ const Result: FC<ResultProps> = ({ title, questions, redo, edit }) => {
 
   const handleSaveImage = () => {
     if (imageContainerRef.current) {
-      toPng(imageContainerRef.current, { cacheBust: true, quality: 3 })
-        .then((dataUrl) => {
+      html2canvas(imageContainerRef.current, { scale: 3 })
+        .then(function (canvas) {
           const link = document.createElement('a');
           link.download = 'my-month-summary.png';
-          link.href = dataUrl;
+          link.href = canvas.toDataURL('image/png');
           link.click();
         })
-        .catch((err) => {
+        .catch(function (err) {
           console.log('Failed to save image', err);
           toast({
             title: '이미지를 다운로드 할 수 없습니다.',
