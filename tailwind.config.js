@@ -13,8 +13,8 @@ export default {
     },
     fontFamily: {
       gothic: ['"Paperlogy"', 'ui-sans-serif', 'system-ui'],
-      myungjo: ['"Chosunilbo Myungjo"', 'ui-serif', 'system-ui'],
-      cute: ['"Omyu Pretty"', 'ui-sans-serif', 'system-ui'],
+      myungjo: ['"GowunBatang"', 'ui-serif', 'system-ui'],
+      cute: ['"Okticon"', 'ui-sans-serif', 'system-ui'],
     },
   },
   plugins: [require('tailwindcss-animate')],

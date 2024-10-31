@@ -24,18 +24,33 @@
 }
 
 @font-face {
-  font-family: 'Chosunilbo Myungjo';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/Chosunilbo_myungjo.woff')
+  font-family: 'GowunBatang';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/GowunBatang-Regular.woff')
     format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Omyu Pretty';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2')
+  font-family: 'GowunBatang';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/GowunBatang-Bold.woff')
+    format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Okticon';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408@1.0/Ownglyph_okticon-Rg.woff2')
     format('woff2');
   font-weight: normal;
   font-style: normal;
-  size-adjust: 120%;
+}
+
+@font-face {
+  font-family: 'Okticon';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408@1.0/Ownglyph_okticon-Bd.woff2')
+    format('woff2');
+  font-weight: 700;
+  font-style: normal;
 }
