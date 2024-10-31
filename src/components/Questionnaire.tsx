@@ -276,7 +276,6 @@ const Display = forwardRef<HTMLImageElement, DisplayProps>(function MyInput(
   useEffect(() => {
     // When container height changes, reset font size to default
     if (!hidden) {
-      setHidden(true); // Hide content while font size is adjusting
       setFontSize(DEFAULT_FONT_SIZE);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -285,6 +284,7 @@ const Display = forwardRef<HTMLImageElement, DisplayProps>(function MyInput(
   useEffect(() => {
     // When content height changes, decrease font size if content overflows container
     if (contentRect.height > containerRect.height - PADDING * 2) {
+      setHidden(true); // Hide content while font size is adjusting
       setFontSize((size) => size - FONT_SIZE_STEP);
     } else {
       setHidden(false); // Reveal content when font size is optimized
