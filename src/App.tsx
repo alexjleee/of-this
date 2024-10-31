@@ -11,7 +11,7 @@ import MonthCustom from '@/pages/MonthCustom';
 import MonthSummary from '@/pages/MonthSummary';
 
 const AppLayout: FC<PropsWithChildren> = ({ children }) => (
-  <div className='flex flex-col w-full h-screen min-h-fit'>
+  <div className='flex flex-col w-full h-screen min-h-fit font-gothic'>
     <Header />
     <main className='flex-1 w-full bg-zinc-50 text-zinc-950'>
       <div className='max-w-4xl h-full mx-auto px-4 py-8'>{children}</div>

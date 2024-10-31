@@ -11,6 +11,11 @@ export default {
       },
       colors: {},
     },
+    fontFamily: {
+      gothic: ['"Paperlogy"', 'ui-sans-serif', 'system-ui'],
+      myungjo: ['"Chosunilbo Myungjo"', 'ui-serif', 'system-ui'],
+      cute: ['"Omyu Pretty"', 'ui-sans-serif', 'system-ui'],
+    },
   },
   plugins: [require('tailwindcss-animate')],
 };
