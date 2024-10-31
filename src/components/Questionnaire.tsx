@@ -1,18 +1,11 @@
-import {
-  FC,
-  forwardRef,
-  Fragment,
-  useEffect,
-  useId,
-  useRef,
-  useState,
-} from 'react';
+import { FC, Fragment, useEffect, useId, useState } from 'react';
 import { Proportions, Type } from 'lucide-react';
 import html2canvas from 'html2canvas';
 
 import { Question } from '@/types/question.types';
 import useMeasure from '@/hooks/useMeasure';
 import { useToast } from '@/hooks/use-toast';
+import { useDebounce } from '@/hooks/useDebounce';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -245,10 +238,7 @@ const DEFAULT_FONT_SIZE = 1.25; // 1.25rem = 20px
 const FONT_SIZE_STEP = 0.0625; // 0.0625rem = 1px
 const PADDING = 20;
 
-const Display = forwardRef<HTMLImageElement, DisplayProps>(function MyInput(
-  { questions },
-  imageContainerRef,
-) {
+const Display: FC<DisplayProps> = ({ questions }) => {
   const [ratioIndex, setRatioIndex] = useState(0);
 
   const handleRatio = () => {
@@ -272,6 +262,14 @@ const Display = forwardRef<HTMLImageElement, DisplayProps>(function MyInput(
   const [containerRef, containerRect] = useMeasure();
   const [contentRef, contentRect] = useMeasure();
   const [hidden, setHidden] = useState(false);
+  const [imageSrc, setImageSrc] = useState('');
+
+  const convertToImage = (element: HTMLElement) => {
+    html2canvas(element, { scale: 3 }).then((canvas) => {
+      const image = canvas.toDataURL('image/png');
+      setImageSrc(image);
+    });
+  };
 
   useEffect(() => {
     // When container height changes, reset font size to default
@@ -292,6 +290,15 @@ const Display = forwardRef<HTMLImageElement, DisplayProps>(function MyInput(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contentRect.height]);
 
+  const debouncedConvertToImage = useDebounce(convertToImage, 500);
+
+  useEffect(() => {
+    // When font family, color or container height changes, regenerate image
+    setImageSrc('');
+    debouncedConvertToImage(containerRef.current); // wait for content to rerender before capture image
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fontIndex, color, containerRect.height]);
+
   return (
     <div className='flex flex-col items-center gap-4 w-full max-w-96 h-full'>
       {/* Change Ratio & Theme Buttons */}
@@ -307,10 +314,12 @@ const Display = forwardRef<HTMLImageElement, DisplayProps>(function MyInput(
         </Button>
       </div>
       {/* Display */}
-      <div ref={containerRef} className='w-full h-full overflow-hidden'>
+      <div
+        ref={containerRef}
+        className=' relative w-full h-full overflow-hidden'
+      >
         <AspectRatio ratio={RATIOS[ratioIndex]}>
           <div
-            ref={imageContainerRef}
             className={`flex justify-center items-center w-full h-full ${colorVariants[color].container} ${FONTS[fontIndex]}`}
           >
             <div
@@ -361,10 +370,14 @@ const Display = forwardRef<HTMLImageElement, DisplayProps>(function MyInput(
             </div>
           </div>
         </AspectRatio>
+        <div className='absolute z-10 top-0 left-0 bottom-0 right-0'>
+          <img src={imageSrc} />
+        </div>
       </div>
+      <div>⏶ 이미지 꾹 눌러서 저장하기 ⏶</div>
     </div>
   );
-});
+};
 
 interface ResultProps {
   title: string;
@@ -374,29 +387,6 @@ interface ResultProps {
 }
 const Result: FC<ResultProps> = ({ title, questions, redo, edit }) => {
   const { toast } = useToast();
-
-  const imageContainerRef = useRef(null);
-
-  const handleSaveImage = () => {
-    if (imageContainerRef.current) {
-      html2canvas(imageContainerRef.current, { scale: 3 })
-        .then(function (canvas) {
-          const link = document.createElement('a');
-          link.download = 'my-month-summary.png';
-          link.href = canvas.toDataURL('image/png');
-          link.click();
-        })
-        .catch(function (err) {
-          console.log('Failed to save image', err);
-          toast({
-            title: '이미지를 다운로드 할 수 없습니다.',
-            description: '죄송합니다. 잠시 후 다시 시도해주세요.',
-            duration: 2000,
-            variant: 'destructive',
-          });
-        });
-    }
-  };
 
   const handleShare = () => {
     const currentUrl = `${window.location}`;
@@ -423,19 +413,16 @@ const Result: FC<ResultProps> = ({ title, questions, redo, edit }) => {
   return (
     <div className='flex flex-col justify-between items-center gap-8 w-full h-full'>
       <h2 className='text-sm font-semibold'>{title}</h2>
-      <Display questions={questions} ref={imageContainerRef} />
+      <Display questions={questions} />
       <div className='flex flex-col gap-4 w-full max-w-96'>
-        <Button onClick={handleSaveImage} className='w-full'>
-          이미지 저장하기
-        </Button>
-        <Button onClick={handleShare} variant='outline' className='w-full'>
-          공유하기
-        </Button>
         <Button onClick={edit} variant='outline' className='w-full'>
           수정하기
         </Button>
         <Button onClick={redo} variant='outline' className='w-full'>
           다시하기
+        </Button>
+        <Button onClick={handleShare} className='w-full'>
+          공유하기
         </Button>
       </div>
     </div>
