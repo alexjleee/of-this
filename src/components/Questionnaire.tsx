@@ -232,7 +232,10 @@ const Display: FC<DisplayProps> = ({ questions }) => {
         {/* TODO: Add theme buttons */}
       </div>
       {/* Display */}
-      <div ref={containerRef} className='w-full h-full bg-white'>
+      <div
+        ref={containerRef}
+        className='w-full h-full bg-white overflow-hidden'
+      >
         <AspectRatio ratio={RATIOS[ratioIndex]}>
           <div className='flex justify-center items-center w-full h-full'>
             <div
