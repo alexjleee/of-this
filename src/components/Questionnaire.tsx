@@ -1,5 +1,14 @@
-import { FC, Fragment, useEffect, useId, useState } from 'react';
+import {
+  FC,
+  forwardRef,
+  Fragment,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react';
 import { Proportions } from 'lucide-react';
+import { toPng } from 'html-to-image';
 
 import { Question } from '@/types/question.types';
 import useMeasure from '@/hooks/useMeasure';
@@ -191,7 +200,10 @@ const DEFAULT_FONT_SIZE = 1.25; // 1.25rem = 20px
 const FONT_SIZE_STEP = 0.0625; // 0.0625rem = 1px
 const PADDING = 20;
 
-const Display: FC<DisplayProps> = ({ questions }) => {
+const Display = forwardRef<HTMLImageElement, DisplayProps>(function MyInput(
+  { questions },
+  imageContainerRef,
+) {
   const [ratioIndex, setRatioIndex] = useState(0);
 
   const handleRatio = () => {
@@ -232,12 +244,12 @@ const Display: FC<DisplayProps> = ({ questions }) => {
         {/* TODO: Add theme buttons */}
       </div>
       {/* Display */}
-      <div
-        ref={containerRef}
-        className='w-full h-full bg-white overflow-hidden'
-      >
+      <div ref={containerRef} className='w-full h-full overflow-hidden'>
         <AspectRatio ratio={RATIOS[ratioIndex]}>
-          <div className='flex justify-center items-center w-full h-full'>
+          <div
+            ref={imageContainerRef}
+            className='flex justify-center items-center w-full h-full bg-white'
+          >
             <div
               ref={contentRef}
               style={{
@@ -273,7 +285,7 @@ const Display: FC<DisplayProps> = ({ questions }) => {
       </div>
     </div>
   );
-};
+});
 
 interface ResultProps {
   title: string;
@@ -282,8 +294,21 @@ interface ResultProps {
   edit: () => void;
 }
 const Result: FC<ResultProps> = ({ title, questions, redo, edit }) => {
+  const imageContainerRef = useRef(null);
+
   const handleSaveImage = () => {
-    // TODO: save the result as a image
+    if (imageContainerRef.current) {
+      toPng(imageContainerRef.current, { cacheBust: true, quality: 3 })
+        .then((dataUrl) => {
+          const link = document.createElement('a');
+          link.download = 'my-month-summary.png';
+          link.href = dataUrl;
+          link.click();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const handleShare = () => {
@@ -293,7 +318,7 @@ const Result: FC<ResultProps> = ({ title, questions, redo, edit }) => {
   return (
     <div className='flex flex-col justify-between items-center gap-8 w-full h-full'>
       <h2 className='text-sm font-semibold'>{title}</h2>
-      <Display questions={questions} />
+      <Display questions={questions} ref={imageContainerRef} />
       <div className='flex flex-col gap-4 w-full max-w-96'>
         <Button onClick={handleSaveImage} className='w-full'>
           이미지 저장하기
