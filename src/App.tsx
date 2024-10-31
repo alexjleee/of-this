@@ -6,8 +6,6 @@ import Footer from '@/components/Footer';
 import { Toaster } from '@/components/ui/toaster';
 
 import Home from '@/pages/Home';
-import Month from '@/pages/Month';
-import MonthCustom from '@/pages/MonthCustom';
 import MonthSummary from '@/pages/MonthSummary';
 import YearSummary from '@/pages/YearSummary';
 
@@ -27,9 +25,13 @@ function App() {
     <AppLayout>
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/month/' element={<Month />} />
-        <Route path='/month-custom/' element={<MonthCustom />} />
+        {/* TODO:  */}
+        {/* <Route path='/month/' element={<Month />} /> */}
+        {/* <Route path='/month-custom/' element={<MonthCustom />} /> */}
         <Route path='/month-summary/' element={<MonthSummary />} />
+        {/* TODO:  */}
+        {/* <Route path='/year/' element={<Month />} /> */}
+        {/* <Route path='/year-custom/' element={<MonthCustom />} /> */}
         <Route path='/year-summary/' element={<YearSummary />} />
       </Routes>
     </AppLayout>
