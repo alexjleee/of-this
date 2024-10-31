@@ -9,6 +9,7 @@ import Home from '@/pages/Home';
 import Month from '@/pages/Month';
 import MonthCustom from '@/pages/MonthCustom';
 import MonthSummary from '@/pages/MonthSummary';
+import YearSummary from '@/pages/YearSummary';
 
 const AppLayout: FC<PropsWithChildren> = ({ children }) => (
   <div className='flex flex-col w-full h-screen min-h-fit font-gothic'>
@@ -29,6 +30,7 @@ function App() {
         <Route path='/month/' element={<Month />} />
         <Route path='/month-custom/' element={<MonthCustom />} />
         <Route path='/month-summary/' element={<MonthSummary />} />
+        <Route path='/year-summary/' element={<YearSummary />} />
       </Routes>
     </AppLayout>
   );
